@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:homevee_app/gui/activities/mainmenu.dart';
 import 'package:homevee_app/gui/dialogs.dart';
-import 'package:homevee_app/model/room.dart';
+import '../../model/room.dart';
 import 'package:homevee_app/system/serverdata.dart';
 import 'package:http/http.dart';
 import '../../service/login.dart' as loginService;
@@ -123,7 +123,7 @@ class _State extends State<Login> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MainMenu(roomList: roomList)),
+      MaterialPageRoute(builder: (context) => MainMenu(roomList)),
     );
   }
 }
