@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:homevee_app/gui/activities/mainmenu.dart';
 import 'package:homevee_app/gui/dialogs.dart';
-import 'package:homevee_app/system/serverdata.dart';
 
 import 'package:homevee_app/service/login.dart' as loginService;
+import 'package:homevee_app/system/serverdata.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _State extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    serverData.getUserdata().then((userData) => {this.autoLoginSetup(userData)});
+    getUserdata().then((userData) => {this.autoLoginSetup(userData)});
 
     return Scaffold(
         appBar: AppBar(
