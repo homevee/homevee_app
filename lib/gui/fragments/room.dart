@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:homevee_app/gui/emptyitem.dart';
 import 'package:homevee_app/gui/roomitems/roomitemview.dart';
 import 'package:homevee_app/model/to/item/roomitems/roomitem.dart';
+import 'package:homevee_app/service/device/device.dart';
 import 'package:homevee_app/service/roomdata.dart';
 
 class RoomFragment extends StatefulWidget {
-  String roomId;
+  String roomId, roomName;
 
-  RoomFragment(this.roomId);
+  RoomFragment(this.roomId, this.roomName);
 
   @override
   RoomFragmentState createState() => RoomFragmentState();
@@ -33,22 +35,43 @@ class RoomFragmentState extends State<RoomFragment> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: getColumnCount()),
-        itemCount: roomItems.length + 1,
-        itemBuilder: (context, index) {
-          if (index == roomItems.length) {
-            return _buildProgressIndicator();
-          } else {
-            return RoomItemView.createFromRoomItem(roomItems[index]);
-          }
-        }
-      )
+      body: getBody()
     );
   }
 
+  Widget getBody(){
+    if(isPerformingRequest){
+      return _buildProgressIndicator();
+    }
+    else if (roomItems.isEmpty) {
+      return EmptyItem("Keine Elemente", "Im Raum '"+widget.roomName+"' gibt es noch keine Elemente.");
+    }
+    else {
+      return GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: getColumnCount()),
+          itemCount: roomItems.length,
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () => onTapped(index),
+              child: RoomItemView.createFromRoomItem(roomItems[index]),
+            );
+          }
+      );
+    }
+  }
+
+  void onTapped(int index) async{
+    RoomItem roomItem = roomItems[index];
+
+    roomItem = await DeviceService.triggerDeviceAction(roomItem);
+
+    setState(() {
+      roomItems[index] = roomItem;
+    });
+  }
+
   int getColumnCount(){
-    if(roomItems.isEmpty) return 1;
+    if(roomItems == null || roomItems.isEmpty) return 1;
 
     double width = MediaQuery.of(context).size.width;
 
@@ -63,10 +86,7 @@ class RoomFragmentState extends State<RoomFragment> {
     return new Padding(
       padding: const EdgeInsets.all(32.0),
       child: new Center(
-        child: new Opacity(
-          opacity: isPerformingRequest ? 1.0 : 0.0,
-          child: new CircularProgressIndicator(),
-        ),
+        child: new CircularProgressIndicator()
       ),
     );
   }
@@ -74,7 +94,7 @@ class RoomFragmentState extends State<RoomFragment> {
   @override
   void initState() {
     super.initState();
-    roomItems = new List();
+    roomItems = null;
     loadRoomItems();
   }
 

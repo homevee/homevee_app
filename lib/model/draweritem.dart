@@ -20,7 +20,7 @@ class DrawerItem{
       case "settings":
         return new SettingsFragment();
       default:
-        return new RoomFragment(id);
+        return new RoomFragment(id, title);
     }
   }
 }
