@@ -63,7 +63,7 @@ class RoomFragmentState extends State<RoomFragment> {
   void onTapped(int index) async{
     RoomItem roomItem = roomItems[index];
 
-    roomItem = await DeviceService.triggerDeviceAction(roomItem);
+    roomItem = await DeviceService.triggerDeviceAction(context, roomItem);
 
     setState(() {
       roomItems[index] = roomItem;

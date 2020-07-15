@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homevee_app/gui/activities/mainmenu.dart';
+import 'package:homevee_app/gui/customprogressdialog.dart';
 import 'package:homevee_app/gui/dialogs.dart';
 
 import 'package:homevee_app/service/login.dart' as loginService;
@@ -99,14 +100,21 @@ class _State extends State<Login> {
   }
 
   void doLogin(){
+    CustomProgressDialog progressDialog = new CustomProgressDialog(context,
+        "Anmelden...");
+
+    progressDialog.show();
+
     loginService.login(usernameController.text,
                             passwordController.text,
                             remoteIdController.text.toUpperCase()).then((roomList) => {
       if(roomList != null){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MainMenu(roomList)),
-        )
+        progressDialog.hide().then((value) => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MainMenu(roomList)),
+          )
+        })
       }
       else{
         showAlertDialog(context, "Login fehlgeschlagen", "Login fehlgeschlagen, bitte versuche es erneut.")

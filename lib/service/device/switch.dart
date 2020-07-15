@@ -1,9 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:homevee_app/gui/customprogressdialog.dart';
 import 'package:homevee_app/model/to/item/roomitems/switchitem.dart';
 
 import '../api.dart';
 
 class SwitchDeviceService{
-  static Future<SwitchItem> toggle(SwitchItem switchItem) async{
+  static Future<SwitchItem> toggle(BuildContext context, SwitchItem switchItem) async{
+    CustomProgressDialog progressDialog = new CustomProgressDialog(context,
+        "Ausführen...");
+
+    progressDialog.show();
+
     var data = new Map<String, dynamic>();
     data.putIfAbsent("action", () => "setmodes");
     data.putIfAbsent("type", () => switchItem.deviceType);
@@ -17,6 +24,8 @@ class SwitchDeviceService{
       case "ok":
         switchItem.value = !switchItem.value;
     }
+
+    progressDialog.hide();
 
     return new Future.value(switchItem);
   }

@@ -1,12 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:homevee_app/model/to/item/roomitems/roomitem.dart';
 import 'package:homevee_app/model/to/item/roomitems/switchitem.dart';
 import 'package:homevee_app/service/device/switch.dart';
 
 class DeviceService{
-  static Future<RoomItem> triggerDeviceAction(RoomItem roomItem){
+  static Future<RoomItem> triggerDeviceAction(BuildContext context, RoomItem roomItem){
     switch(roomItem.type){
       case "switch":
-        return SwitchDeviceService.toggle(roomItem as SwitchItem);
+        return SwitchDeviceService.toggle(context, roomItem as SwitchItem);
       /*
       case "heating":
         return HeatingDeviceService.toggle(roomItem as HeatingItem);
