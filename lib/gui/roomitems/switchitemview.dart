@@ -11,8 +11,8 @@ class SwitchItemView extends RoomItemView{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          new Icon(roomItem.icon.icon, size: 75.0),
-          new Text(roomItem.name, style: TextStyle(height: 5, fontSize: 25)),
+          new Icon(roomItem.icon.icon, size: 60.0),
+          new Text(roomItem.name, style: TextStyle(height: 1, fontSize: 15)),
           getValueView(roomItem as SwitchItem),
         ]
       )

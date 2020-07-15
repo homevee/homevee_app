@@ -52,7 +52,7 @@ class RoomFragmentState extends State<RoomFragment> {
 
     double width = MediaQuery.of(context).size.width;
 
-    int itemWidth = 300;
+    int itemWidth = 200;
 
     int columnCount = (width/itemWidth).round();
 
