@@ -1,21 +1,30 @@
+import 'dart:convert';
+
+import 'package:homevee_app/model/to/room.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart' as api;
-import '../system/serverdata.dart' as serverData;
+import 'package:homevee_app/system/serverdata.dart' as serverData;
 
-Future<http.Response> login(String username, String password,
+Future<List<Room>> login(String username, String password,
     String remoteId) async {
 
   var data = new Map<String, String>();
 
   data.putIfAbsent("action", () => "login");
 
-  http.Response response = await api.processData(username, password, remoteId, data);
+  serverData.UserData userData = new serverData.UserData(username, password, remoteId);
+
+  api.ResponseData response = await api.processDataWithUserData(userData, data);
 
   switch(response.statusCode){
     case 200:
       serverData.updateUserData(username, password, remoteId);
-      break;
-  }
 
-  return response;
+      List<Room> roomList = new List();
+      response.data["rooms"].forEach((element) {roomList.add(Room.fromJson(element));});
+
+      return new Future.value(roomList);
+    default:
+      return new Future.value(null);
+  }
 }

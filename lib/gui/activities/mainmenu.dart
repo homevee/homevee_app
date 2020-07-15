@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:homevee_app/gui/fragments/overview.dart';
-import 'package:homevee_app/gui/fragments/room.dart';
 import 'package:homevee_app/model/draweritem.dart';
-import '../../model/room.dart';
-import 'voicecommand.dart';
+
+import '../../model/to/room.dart';
 import '../../system/icons.dart' as icons;
+import 'voicecommand.dart';
 
 class MainMenu extends StatefulWidget {
 
@@ -98,7 +97,7 @@ class MainMenuState extends State<MainMenu> {
           ],
         ),
       ),
-      body: widget.drawerItems.firstWhere((element) => element.id == selectedDrawerId).fragment
+      body: widget.drawerItems.firstWhere((element) => element.id == selectedDrawerId).getFragment()
     );
   }
 }

@@ -8,13 +8,10 @@ class DrawerItem{
   String title;
   String id;
   Icon icon;
-  StatefulWidget fragment;
 
-  DrawerItem(this.title, this.icon, this.id){
-    this.fragment = getFragment(this.id);
-  }
+  DrawerItem(this.title, this.icon, this.id);
 
-  StatefulWidget getFragment(String id){
+  StatefulWidget getFragment(){
     switch (id) {
       case "dashboard":
         return new DashboardFragment();

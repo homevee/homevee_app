@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 class DashboardFragment extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return new DashboardFragmentState();
-  }
+  DashboardFragmentState createState() => DashboardFragmentState();
 }
 
 class DashboardFragmentState extends State<DashboardFragment> {

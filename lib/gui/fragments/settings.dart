@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 class SettingsFragment extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return new SettingsFragmentState();
-  }
+  SettingsFragmentState createState() => SettingsFragmentState();
 }
 
 class SettingsFragmentState extends State<SettingsFragment> {
