@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homevee_app/gui/roomitems/roomitemview.dart';
 import 'package:homevee_app/model/to/item/roomitems/roomitem.dart';
 import 'package:homevee_app/service/roomdata.dart';
 
@@ -32,17 +33,30 @@ class RoomFragmentState extends State<RoomFragment> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: ListView.builder(
+      body: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: getColumnCount()),
         itemCount: roomItems.length + 1,
         itemBuilder: (context, index) {
           if (index == roomItems.length) {
             return _buildProgressIndicator();
           } else {
-            return ListTile(title: new Text(roomItems[index].name));
+            return RoomItemView.createFromRoomItem(roomItems[index]);
           }
-        },
+        }
       )
     );
+  }
+
+  int getColumnCount(){
+    if(roomItems.isEmpty) return 1;
+
+    double width = MediaQuery.of(context).size.width;
+
+    int itemWidth = 300;
+
+    int columnCount = (width/itemWidth).round();
+
+    return (columnCount < 1) ? 1 : columnCount;
   }
 
   Widget _buildProgressIndicator() {

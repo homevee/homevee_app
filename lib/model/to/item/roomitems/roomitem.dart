@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:homevee_app/model/to/item/item.dart';
 import 'package:homevee_app/model/to/item/roomitems/switchitem.dart';
+import 'package:homevee_app/system/icons.dart' as icons;
 
 import 'heatingitem.dart';
 import 'ipcamitem.dart';
@@ -7,13 +9,14 @@ import 'ipcamitem.dart';
 class RoomItem extends Item{
   String name;
   int id;
-  String icon;
+  Icon icon;
   String deviceType;
   String type;
   String room;
 
-  RoomItem(this.name, this.id, this.icon, this.deviceType, this.type, this.room);
-
+  RoomItem(this.name, this.id, String icon, this.deviceType, this.type, this.room){
+    this.icon = icons.getDeviceIcon(icon);
+  }
 
   static List<RoomItem> createListFromJSON(List<dynamic> objects, String roomId){
     List<RoomItem> roomItems = new List();
