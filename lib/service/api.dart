@@ -1,24 +1,39 @@
 import 'dart:convert';
 
+import 'package:homevee_app/system/serverdata.dart' as serverData;
+import 'package:homevee_app/system/serverdata.dart';
 import 'package:http/http.dart' as http;
 
-Future<http.Response> processData(String username, String password,
-    String remoteId, Map<String, String> data) async{
+class ResponseData{
+  int statusCode;
+  String status;
+  Map<String, dynamic> data;
 
-  data.putIfAbsent("username", () => username);
-  data.putIfAbsent("password", () => password);
+  ResponseData(this.statusCode, this.status, this.data);
+}
+
+Future<ResponseData> processData(Map<String, String> data) async{
+  UserData userData = await serverData.getUserdata();
+  return processDataWithUserData(userData, data);
+}
+
+Future<ResponseData> processDataWithUserData(UserData userData, Map<String, String> data) async{
+  data.putIfAbsent("username", () => userData.username);
+  data.putIfAbsent("password", () => userData.password);
   data.putIfAbsent("language", () => "de");
 
   const String CLOUD_URL = "https://cloud.homevee.de";
 
   print("Sending request 'processData'");
 
-  http.Response response = await http.post(CLOUD_URL+"/processdata/"+remoteId.toUpperCase(),
+  http.Response response = await http.post(CLOUD_URL+"/processdata/"+userData.remoteId.toUpperCase(),
       headers: { 'Content-type': 'application/json',
         'Accept': 'application/json'},
       body: json.encode(data));
 
-  print(response.body);
+  Map<String, dynamic> responseData = json.decode(response.body);
 
-  return response;
+  print(responseData["data"]);
+
+  return new ResponseData(response.statusCode, responseData["type"], responseData["data"]);
 }

@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:homevee_app/gui/activities/mainmenu.dart';
 import 'package:homevee_app/gui/dialogs.dart';
-import '../../model/room.dart';
 import 'package:homevee_app/system/serverdata.dart';
-import 'package:http/http.dart';
-import '../../service/login.dart' as loginService;
-import '../../system/serverdata.dart' as serverData;
+
+import 'package:homevee_app/service/login.dart' as loginService;
 
 class Login extends StatefulWidget {
   @override
@@ -105,25 +101,16 @@ class _State extends State<Login> {
   void doLogin(){
     loginService.login(usernameController.text,
                             passwordController.text,
-                            remoteIdController.text.toUpperCase()).then((response) => {
-      if(response.statusCode == 200){
-        toMainMenu(response)
+                            remoteIdController.text.toUpperCase()).then((roomList) => {
+      if(roomList != null){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MainMenu(roomList)),
+        )
       }
       else{
-        showAlertDialog(context, "Login fehlgeschlagen", "Login fehlgeschlagen, bitte versuche es erneut. ("+response.statusCode.toString()+")")
+        showAlertDialog(context, "Login fehlgeschlagen", "Login fehlgeschlagen, bitte versuche es erneut.")
       }
     });
-  }
-
-  void toMainMenu(Response response){
-    Map<String, dynamic> responseData = json.decode(response.body);
-
-    List<Room> roomList = new List();
-    responseData["data"]["rooms"].forEach((element) {roomList.add(Room.fromJson(element));});
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MainMenu(roomList)),
-    );
   }
 }
